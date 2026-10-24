@@ -1,0 +1,57 @@
+name: roboshop
+services:
+   mongodb:
+       build: ./mongodb
+       image: sundarkumar135/mongodb:v1
+       container_name: mongodb
+   catalogue: 
+       build: ./catalogue
+       image: sundarkumar135/catalogue:v1
+       container_name: catalogue
+       depends_on:
+         - mongodb
+   frontend:
+       build: ./frontend
+       image: sundarkumar135/frontend:v1
+       container_name: frontend
+       ports:
+         - "80:80"
+       depends_on:
+         - catalogue
+         - user
+         - cart
+   user:
+       build: ./user
+       image: sundarkumar135/user:v1
+       container_name: user
+       environment:
+         mongo: true
+         REDIS_URL:'redis://redis:6379/user'
+         MONGO_URL:"mongodb://mongodb:27017/users"
+       depends_on:
+         - redis
+         - mongodb
+   cart:
+       build: ./cart
+       image: sundarkumar135/cart:v1
+       container_name: cart
+       environment:
+         REDIS_HOST: redis
+         CATALOGUE_HOST: catalogue
+         CATALOGUE_PORT: 8080
+       depends_on:
+         - redis
+         - catalogue
+   mysql:
+       build: ./mysql
+       image: sundarkumar135/mysql:v1
+       container_name: mysql
+       command: --mysql-native-password=ON --innodb-lock_wait_timeout=120
+       environment:
+         MYSQL_ROOT_PASSWORD: "RoboShop@1"
+      
+networks:
+   default:
+       name: roboshop
+       driver: bridge
+       external: false      
