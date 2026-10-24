@@ -28,7 +28,7 @@ services:
        container_name: user
        environment:
          mongo: true
-         REDIS_HOST: 'redis://redis:6379/user'
+         REDIS_URL: 'redis://redis:6379/user'
          MONGO_URL: "mongodb://mongodb:27017/users"
        depends_on:
          - redis
