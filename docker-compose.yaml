@@ -33,7 +33,7 @@ services:
        depends_on:
          - redis
          - mongodb
-     redis:
+   redis:
        image: redis:7
        container_name: redis
    cart:
