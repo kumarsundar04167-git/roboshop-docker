@@ -70,7 +70,7 @@ services:
        depends_on:
          - mysql
          - cart
-     payment:
+   payment:
         build: ./payment
         image: sundarkumar135/payment:v1
         container_name: payment
